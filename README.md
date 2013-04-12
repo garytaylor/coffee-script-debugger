@@ -3,7 +3,8 @@
 
 This gem is used in a rails 3.2+ environment with coffeescript 1.6.1+
 It will produce a source map file suitable for use by browsers (only tested with chrome at the moment)
-The browser can then see and debug your coffeescript files just like normal javascript file.
+The browser can then see and debug your coffeescript files just like normal javascript files.
+##Rubymine / Jetbrains Support
 It also works with the Rubymine plugin.  In order to use it in this environment, follow the instructions in this article, but ignore step 1 and replace it with the installation instructions below
 
 http://confluence.jetbrains.com/display/RUBYDEV/Debugging+CoffeeScript+Code
