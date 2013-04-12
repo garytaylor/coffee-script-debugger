@@ -8,9 +8,6 @@ module CoffeeScript
   CompilationError = ExecJS::ProgramError
 
   module Source
-    def self.bundled_path
-      File.expand_path('coffee-script-redux.js', File.dirname(__FILE__))
-    end
 
     def self.path
       @path ||= ENV['COFFEESCRIPT_SOURCE_PATH'] || bundled_path
@@ -22,15 +19,15 @@ module CoffeeScript
     end
 
     def self.contents
-        @contents ||= "root = {};\n" + File.read(path).encode!('UTF-8', 'UTF-8', :invalid => :replace)
+        @contents ||= File.read(path).encode!('UTF-8', 'UTF-8', :invalid => :replace)
     end
 
     def self.version
-      @version ||= context.eval('CoffeeScript.VERSION')
+      @version ||= contents[/CoffeeScript Compiler v([\d.]+)/, 1]
     end
 
     def self.bare_option
-      @bare_option ||= 'bare'
+      @bare_option ||= contents.match(/noWrap/) ? 'noWrap' : 'bare'
     end
 
     def self.context
@@ -60,13 +57,15 @@ module CoffeeScript
     def compile(script, options = {})
       script = script.read if script.respond_to?(:read)
 
-      unless options.key?(:bare)
+      if options.key?(:bare)
+      elsif options.key?(:no_wrap)
+        options[:bare] = options[:no_wrap]
+      else
         options[:bare] = false
       end
 
-      format = options[:format] == :map ? 'sourceMap' : 'js'
-      options.delete(:format)
-      Source.context.call("(function() { return root.CoffeeScript.#{ format }(root.CoffeeScript.compile(root.CoffeeScript.parse.apply(this, arguments))) })", script, options)
+      o=Source.context.call("(function(script){return CoffeeScript.compile(script,{sourceMap:true})})",script)
+      "(function coffee_script_debugger(){#{o.to_json}})"
     end
   end
 end
