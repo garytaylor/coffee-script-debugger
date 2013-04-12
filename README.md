@@ -9,9 +9,11 @@ It also works with the Rubymine plugin.  In order to use it in this environment,
 
 http://confluence.jetbrains.com/display/RUBYDEV/Debugging+CoffeeScript+Code
 
+##Important
 Note that this is only intended for your development environment as it puts the raw files in public/assets - this includes any files that have erb
 in them, so you have been warned.
 
+##Credits
 Credit where credit is due, this is based on the 'coffee-script-redux-debugger' from https://github.com/avokin/coffee-script-redux-debugger.git
 ##Installation
 
